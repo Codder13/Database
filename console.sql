@@ -1,44 +1,65 @@
 use test1;
 
 
-create table elev(
-	elevID INT primary key auto_increment
-	,nume varchar(100)
-    ,prenume varchar(100)
-    ,email varchar(100)
-    ,clasaID INT
+create table elev
+(
+    elevID  INT primary key auto_increment,
+    nume    varchar(100),
+    prenume varchar(100),
+    email   varchar(100),
+    clasaID INT,
+    Constraint Fk_clasaID
+        Foreign Key (clasaID) References clasa (clasaID)
 );
 
 
-create table clasa(
-	clasaID INT primary key auto_increment
-	,clasa tinytext
-	,nr_elevi int(3)
-	);
+create table clasa
+(
+    clasaID  INT primary key auto_increment,
+    clasa    tinytext,
+    nr_elevi int check (nr_elevi between 0 and 40),
+    profesor INT
+
+);
+
+create table profesor
+(
+    profID  INT primary key auto_increment,
+    nume    varchar(100),
+    prenume varchar(100),
+    materie varchar(100)
+
+);
 
 
-Alter table elev
-Add Constraint Fk_clasaID
-Foreign Key(clasaID) References clasa(clasaID);
 
-alter table clasa
-add elevi INT;
+select *
+from clasa;
 
-Alter table clasa
-Add Constraint Fk_elevID
-Foreign Key(elevi) References elev(elevID);
+select *
+from elev;
 
-
-select * from clasa;
-
-select * from elev;
+select *
+from profesor;
 
 
-insert into elev values(1, "Bolba","Denis", "denisbolba@gmail.com", null);
+insert into elev (nume, prenume, email, clasaID)
+values ("Bolba", "Denis", "denisbolba@gmail.com", null);
 
-insert into clasa values(1, "10D", 27, 1);
+insert into clasa (clasa, nr_elevi)
+values ("10D", 1);
 
-DELETE FROM elev;
 
-TRUNCATE TABLE elev;
-TRUNCATE TABLE clasa;
+
+
+
+alter table elev
+    drop constraint Fk_clasaID;
+
+
+
+drop table elev;
+
+drop table clasa;
+
+drop table profesor;
